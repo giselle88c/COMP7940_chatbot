@@ -6,6 +6,24 @@ import logging
 import redis
 global redis1
 
+from pymongo import MongoClient
+import datetime
+
+
+
+temperature=27
+humidity =50
+
+# Create a record variable to store the sensor data
+record = {
+   "sensor_id": 1,
+   "temp": temperature,
+   "humi": humidity,
+   "date": datetime.datetime.now(),
+}
+
+# Insert the record
+#collection.insert_one(record)
 
 
 def main():
@@ -19,6 +37,12 @@ def main():
     redis1 = redis.Redis(host=(config['REDIS']['HOST']), password=(config['REDIS']['PASSWORD']), port=(config['REDIS']['REDISPORT']), decode_responses=(config['REDIS']['DECODE_RESPONSE']), username=(config['REDIS']['USER_NAME']))
     #redis1 = redis.Redis(host=(os.environ['REDIS_HOST']), password=(os.environ['REDIS_PASSWORD']), port=(os.environ['REDIS_PORT']), decode_responses=('True'), username=('default'))
     
+    # connect to mongo db
+    DB_url=config['MONGODB']['DB_URL']
+    global mongo_db
+    mongo_db = MongoClient(DB_url)
+
+
     # You can set this logging module, so you will know when
     # and why things do not work as expected Meanwhile, update your config.ini as:
     logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
@@ -40,9 +64,8 @@ def main():
     dispatcher.add_handler(echo_handler)
     """
     # on different commands - answer in Telegram
-    dispatcher.add_handler(CommandHandler("add", add))
     dispatcher.add_handler(CommandHandler("help", help_command))
-    dispatcher.add_handler(CommandHandler("hello", hello))
+    dispatcher.add_handler(CommandHandler("start", start))
 
 
     # To start the bot:
@@ -57,23 +80,15 @@ def help_command(update: Update, context: CallbackContext) -> None:
     update.message.reply_text('Helping you helping you.')
 
 
-def add(update: Update, context: CallbackContext) -> None:
-    """Send a message when the command /add is issued."""
-    try:
-        global redis1
-        logging.info(context.args[0])
-        msg = context.args[0] 
-        # /add keyword <-- this should store the keyword
-        redis1.incr(msg)
-        update.message.reply_text('You have said ' + msg + ' for ' + redis1.get(msg) + ' times.')
-    except (IndexError, ValueError):
-        update.message.reply_text('Usage: /add <keyword>')
+def start(update: Update, context: CallbackContext) -> None:
+    """Send a message when the command /help is issued."""
+    update.message.reply_text('Helping you helping you.')
 
-def hello(update: Update, context: CallbackContext) -> None:
+
+def add(update: Update, context: CallbackContext) -> None:
     """Send a message when the command /hello is issued."""
     try:
-        global redis1
-        logging.info(context.args[0])
+        #logging.info(context.args[0])
         msg = context.args[0] 
 
         update.message.reply_text('Good day, ' + msg + '!')

@@ -15,7 +15,7 @@ class HKBU_ChatGPT():
     # Initialize conversation history—
     global conversation_history
     global conversation_count
-    conversation_history= [{"role": "system", "content": "You are a helpful event advisor"}]
+    conversation_history= [{"role": "system", "content": "You are a Hong Kong movie advisor"}]
     conversation_count =0
 
     def submit(self,user_input):
