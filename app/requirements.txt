@@ -12,6 +12,7 @@ charset-normalizer==3.4.1
 colorama==0.4.6
 configparser==7.1.0
 distro==1.9.0
+dnspython==2.7.0
 exceptiongroup==1.2.2
 frozenlist==1.5.0
 h11==0.14.0
@@ -24,6 +25,7 @@ openai==1.65.2
 propcache==0.3.0
 pydantic==2.10.6
 pydantic_core==2.27.2
+pymongo==4.11.3
 python-telegram-bot==13.7
 pytz==2025.1
 redis==5.2.1
