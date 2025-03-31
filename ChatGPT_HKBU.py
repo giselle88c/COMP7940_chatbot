@@ -18,6 +18,11 @@ class HKBU_ChatGPT():
     conversation_history= [{"role": "system", "content": "You are a Hong Kong movie advisor. Always provide insightful tips and recommendations related to Hong Kong films"}]
     conversation_count =0
 
+    def trim_text(self,text, max_length):
+        if len(text) > max_length:
+            return text[:max_length] + "..."
+        return text
+
     def submit(self,user_input):
         
         # Append user's message to the conversation
@@ -38,7 +43,7 @@ class HKBU_ChatGPT():
         #headers = { 'Content-Type': 'application/json', 'api-key': (os.environ['CHATGPT']) }
         url = (self.config['CHATGPT']['BASICURL']) + "/deployments/" + (self.config['CHATGPT']['MODELNAME']) + "/chat/completions/?api-version=" + (self.config['CHATGPT']['APIVERSION'])
         headers = { 'Content-Type': 'application/json', 'api-key': (self.config['CHATGPT']['ACCESS_TOKEN']) }
-        payload = { 'messages': conversation }
+        payload = { 'messages': self.trim_text(conversation,1000) , 'max_tokens':100}
         response = requests.post(url, json=payload, headers=headers)
     
         if response.status_code == 200:

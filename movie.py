@@ -6,7 +6,8 @@ import logging
 from pymongo import MongoClient
 import datetime
 from ChatGPT_HKBU import HKBU_ChatGPT
-from telegram.constants import ParseMode
+#from telegram.constants import ParseMode
+from telegram import ParseMode
 
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -29,7 +30,7 @@ def start(update: Update, context: CallbackContext) -> int:
     #update.message.reply_text(f'Hello, Nice to meet you. I am a movie advisor :) \nPlease enter the Movie name.')
 
     update.message.reply_text(
-        '👋👱🏼‍♀️ **Hello, nice to meet you!**\nI am your 🎬🍿 *movie advisor* :) \n\nplease send me the *movie name* you would like to know more about.',
+        '👋👱🏼‍♀️ **Hello, nice to meet you\!**\nI am your 🎬🍿 *movie advisor* \n\nWhich *movie* you would like to know more about\?',
         parse_mode=ParseMode.MARKDOWN_V2
 )
     return START
@@ -53,11 +54,13 @@ def user_selection(update: Update, context: CallbackContext) -> int:
 
         #update.message.reply_text(f'Movie: {movie_name}\nDescription: {movie_details}\nrelease date: {movie_date}\nDuration: {duration}\n')
         update.message.reply_text(
-            f'*🎬 Movie:* {movie_name}\n'
-            f'*📜 Description:* {movie_details}\n'
-            f'*📅 Release Date:* {movie_date}\n'
-            f'*⏳ Duration:* {duration}',
+            f'🎬 *Movie\: {movie_name}*\n',
             parse_mode=ParseMode.MARKDOWN_V2
+        )
+        update.message.reply_text(
+            f'📜 {str(movie_details)}\n'
+            f'📅 Release Date: {str(movie_date)}\n'
+            f'⏳ Duration: {duration}'
         )
 
         #update.message.reply_text(f'/comment to give comments\n/query to view comments \n /end to end conversation')
@@ -72,7 +75,7 @@ def user_selection(update: Update, context: CallbackContext) -> int:
     else:
         #update.message.reply_text(f'What do you want ask about {movie_name} \n /end to end conversation')
         update.message.reply_text(
-        f'💬 *What would you like to know about* _{movie_name}_?\n\n'
+        f'💬 What would you like to know about *_{movie_name}_*\?\n\n'
         '/end \- End the conversation at any time',
         parse_mode=ParseMode.MARKDOWN_V2
     )
@@ -99,7 +102,7 @@ def user_search(update: Update, context: CallbackContext) -> int:
         update.message.reply_text(f'Anything you want to ask about {movie_name}?')
         #update.message.reply_text(f'Or enter /comment to give comments\n/query to view comments \n /end to end conversation')
         update.message.reply_text(
-        f'💬 *Here are some things you like to know about:* _{movie_name}_?\n\n'
+        f'💬 *Here are some things you like to know about:* _{movie_name}_\?\n\n'
         '/comment \- Share your thoughts or feedback\n'
         '/query \- View comments from others\n'
         '/end \- End the conversation',
@@ -107,13 +110,13 @@ def user_search(update: Update, context: CallbackContext) -> int:
         )
         return QACTION
     else:
-        update.message.reply_text(f'Anything you want to ask about {movie_name}?')
+        update.message.reply_text(f'Anything you want to ask about {movie_name}?\n/end - End the conversation')
         return SEARCH_MOVIE
 
 def ask_comment(update: Update, context: CallbackContext) -> int:
 
     logging.info("ask comment")
-    update.message.reply_text('Please give us comments')
+    update.message.reply_text('Please give us some comments')
     return ADD_COMMENT
 
 # Function to add comments
@@ -128,13 +131,13 @@ def add_comment(update: Update, context: CallbackContext) -> int:
         # Insert the record
         record={'name':movie_name,'comment':comment, 'datetime':datetime.datetime.now()}
         db['comment'].insert_one(record)
-        update.message.reply_text(f'Thanks for your comment! 😊', parse_mode=ParseMode.MARKDOWN_V2)
+        update.message.reply_text(f'Thanks for your comment\! 😊', parse_mode=ParseMode.MARKDOWN_V2)
 
         
-        update.message.reply_text(f'🔍 *Anything you want to ask about* {movie_name}?')
+        update.message.reply_text(f'🔍 Anything you want to ask about {movie_name}?')
         #update.message.reply_text(f'Or enter /comment to give comments\n/query to view comments \n /end to end conversation')
         update.message.reply_text(
-        f'💬 *Here are some things you like to know about:* _{movie_name}_?\n\n'
+        f'💬 *Here are some things you like to know about\:* _{movie_name}_?\n\n'
         '/comment \- Share your thoughts or feedback\n'
         '/query \- View comments from others\n'
         '/end \- End the conversation',
@@ -158,16 +161,15 @@ def query_movie(update: Update, context: CallbackContext) -> int:
         comments_summary =  getMovieSummary(movie_name)
         #update.message.reply_text(f'Movie: {movie_name}\nComments:\n{comments_summary}')
         update.message.reply_text(
-        f'🎬 *Movie:* {movie_name}\n'
-        f'💬 *Reivew:* \n{comments_summary}',
-        parse_mode=ParseMode.MARKDOWN_V2
+        f'🎬 Movie: {movie_name}\n'
+        f'💬 Reivew: \n{comments_summary}'
         )
 
 
-        update.message.reply_text(f'🔍 *Anything you want to ask about* {movie_name}?')
+        update.message.reply_text(f'🔍 Anything you want to ask about {movie_name}?')
         #update.message.reply_text(f'Or enter /comment to give comments about {movie_name} or \n/query to view commennts \n /end to end the conversation')
         update.message.reply_text(
-        f'💬 *Here are some things you like to know about:* _{movie_name}_?\n\n'
+        f'💬 *Here are some things you like to know about\:* _{movie_name}_?\n\n'
         '/comment \- Share your thoughts or feedback\n'
         '/query \- View comments from others\n'
         '/end \- End the conversation',
@@ -194,7 +196,7 @@ def getMovieSummary(movie_name):
 
             comments_summary = "\n".join(latest_comments)
             global chatgpt
-            reply_message = chatgpt.submit(f'Here are movie comments: {latest_comments}. Please generate a concise movie review summary, ensuring no additional details are included.')
+            reply_message = chatgpt.submit(f'Here are movie comments: {latest_comments}\. Please generate a concise movie review summary, ensuring no additional details are included\.')
             return reply_message
         else: return "No comments yet"
     
@@ -211,7 +213,7 @@ def end_conversation(update: Update, context: CallbackContext) -> int:
 # Main function to set up the bot and handlers
 def main() -> None:
     
-    updater = Updater(token=(config['TELEGRAM']['ACCESS_TOKEN']), use_context=True)
+    updater = Updater(token=(config['TELEGRAM2']['ACCESS_TOKEN']), use_context=True)
     dispatcher = updater.dispatcher
     
     global chatgpt
