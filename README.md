@@ -13,13 +13,13 @@ Paste your public key into the provided text area.
 Give it a title so you can identify it later, then click "Add SSH Key."
 
 ## Connect to Droplet (Digital Ocean)
-ssh root@your_droplet_ip
+ssh root@134.199.209.4
 
 sudo apt update
 sudo apt install python3 python3-pip
 sudo pip3 install virtualenv
 scp /path/to/movie.py root@your_droplet_ip:root/
-scp /path/to/chatbot.py root@your_droplet_ip:root/
+scp /path/to/ChatGPT_HKBU.py root@your_droplet_ip:root/
 scp /path/to/config.init root@your_droplet_ip:root/
 pip3 install -r requirements.txt
 
@@ -33,12 +33,12 @@ source myenv/bin/activate
 # RUN THE PROGRAM
 python3 movie.py
 
-# SET UP Supervisor for REMOTE DEPLOYMENT
+# SET UP Supervisor for REMOTE DEPLOYMENT (ONCE ONLY!!!)
 sudo apt install supervisor
 sudo nano /etc/supervisor/conf.d/movie.conf
 
-==========================
-## movie.conf
+========================== 
+## movie.conf (ONCE ONLY!!!)
 
 In your configuration file, there should be a configuration block that looks like this:
 [program:movie]
