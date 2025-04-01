@@ -1,5 +1,5 @@
 # COMP7940_chatbot
--use Python 3.10.16
+- use Python 3.10.16
 
 
 
