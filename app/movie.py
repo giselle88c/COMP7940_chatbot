@@ -105,7 +105,7 @@ def user_search(update: Update, context: CallbackContext) -> int:
         )
         return QACTION
     else:
-        update.message.reply_text(f'🔍 Anything you want to ask about *{movie_name}*?', parse_mode=ParseMode.MARKDOWN_V2)
+        update.message.reply_text(f'🔍 Anything you want to ask about *{movie_name}*?\n\n/end \- End the conversation', parse_mode=ParseMode.MARKDOWN_V2)
         return SEARCH_MOVIE
 
 def ask_comment(update: Update, context: CallbackContext) -> int:
