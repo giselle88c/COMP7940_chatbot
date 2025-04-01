@@ -18,9 +18,9 @@ ssh root@134.199.209.4
 sudo apt update
 sudo apt install python3 python3-pip
 sudo pip3 install virtualenv
-scp app/movie.py root@your_droplet_ip:root/
-scp app/ChatGPT_HKBU.py root@your_droplet_ip:root/
-scp app/config.init root@your_droplet_ip:root/
+scp app/movie.py root@your_droplet_ip:/root/
+scp app/ChatGPT_HKBU.py root@your_droplet_ip:/root/
+scp app/config.init root@your_droplet_ip:/root/
 pip3 install -r requirements.txt
 
 # RUN THE PROGRAM
