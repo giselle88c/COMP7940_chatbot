@@ -64,7 +64,7 @@ def user_selection(update: Update, context: CallbackContext) -> int:
         f'💬 More actions\:\n'
         '/comment \- Share your thoughts or feedback\n'
         '/query \- View comments from others\n'
-        '/end \- End the conversation',
+        '/end \- End the conversation at any time',
         parse_mode=ParseMode.MARKDOWN_V2
         )
         return QACTION
@@ -100,12 +100,12 @@ def user_search(update: Update, context: CallbackContext) -> int:
         f'💬 More actions\:\n'
         '/comment \- Share your thoughts or feedback\n'
         '/query \- View comments from others\n'
-        '/end \- End the conversation',
+        '/end \- End the conversation at any time',
         parse_mode=ParseMode.MARKDOWN_V2
         )
         return QACTION
     else:
-        update.message.reply_text(f'🔍 Anything you want to ask about *{movie_name}*?\n\n/end \- End the conversation', parse_mode=ParseMode.MARKDOWN_V2)
+        update.message.reply_text(f'🔍 Anything you want to ask about *{movie_name}*?\n\n/end \- End the conversation at any time', parse_mode=ParseMode.MARKDOWN_V2)
         return SEARCH_MOVIE
 
 def ask_comment(update: Update, context: CallbackContext) -> int:
@@ -134,7 +134,7 @@ def add_comment(update: Update, context: CallbackContext) -> int:
         f'💬 More actions\:\n'
         '/comment \- Share your thoughts or feedback\n'
         '/query \- View comments from others\n'
-        '/end \- End the conversation',
+        '/end \- End the conversation at any time',
         parse_mode=ParseMode.MARKDOWN_V2
         )
         return QACTION
@@ -164,7 +164,7 @@ def query_movie(update: Update, context: CallbackContext) -> int:
         f'💬 More actions\:\n'
         '/comment \- Share your thoughts or feedback\n'
         '/query \- View comments from others\n'
-        '/end \- End the conversation',
+        '/end \- End the conversation at any time',
         parse_mode=ParseMode.MARKDOWN_V2
         )
         return QACTION
