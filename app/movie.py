@@ -215,15 +215,23 @@ def main() -> None:
     conv_handler = ConversationHandler(
         entry_points=[CommandHandler('start', start)],
         states={
-            START: [MessageHandler(Filters.text & ~Filters.command, user_selection)],
+            START: [
+            MessageHandler(Filters.text & ~Filters.command, user_selection),
+            CommandHandler('end', end_conversation)
+            ],
+            
             QACTION: [
             CommandHandler('comment', ask_comment),
             CommandHandler('query', query_movie),
             CommandHandler('end', end_conversation),
             MessageHandler(Filters.text & ~Filters.command, user_search),
-            
             ],
-            ADD_COMMENT: [MessageHandler(Filters.text & ~Filters.command, add_comment)],
+
+            ADD_COMMENT: [
+            MessageHandler(Filters.text & ~Filters.command, add_comment),
+            CommandHandler('end', end_conversation)
+            ],
+
             SEARCH_MOVIE: [
             MessageHandler(Filters.text & ~Filters.command, user_search),
             CommandHandler('end', end_conversation)
