@@ -87,7 +87,7 @@ def user_search(update: Update, context: CallbackContext) -> int:
     
     global chatgpt
 
-    reply_message = chatgpt.submit(f'About this movie: {movie_name}, provide short answer following question: \n{update.message.text}')
+    reply_message = chatgpt.submit(f'If \'{movie_name}\' is a movie. If not, say there are no related movie information. Otherwise, only output the answer for the following question: \n{update.message.text}')
 
     logging.info("Update: " + str(update))
     logging.info("context: " + str(context))
